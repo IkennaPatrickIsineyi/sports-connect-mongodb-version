@@ -5,16 +5,13 @@ import { signIn, gotoSignUpPage, gotoResetPasswordPage } from './loginLogic';
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { remoteRequest } from '../app/model';
-import { snackBar } from "../app/SharedComponent";
 import { useDispatch } from 'react-redux';
 import { loadUserData } from '../app/userDataSlice';
-import { loginComplete, openSnackbar, toggleBlockView } from '../app/routeSlice';
-import { useSelector } from 'react-redux';
+import { openSnackbar, toggleBlockView } from '../app/routeSlice';
 
 function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const returnData = useSelector(state => state.route);
     //const nextRoute = useSelector(state => state.route.nextRoute);
 
 
@@ -51,7 +48,7 @@ function Login() {
                                 <Button variant="contained" startIcon={<SignIn />} size='large'
                                     onClick={(event) => {
                                         signIn(event, state, updateState,
-                                            dispatch, loadUserData, loginComplete, remoteRequest,
+                                            dispatch, loadUserData, remoteRequest,
                                             navigate, openSnackbar, toggleBlockView)
                                     }}>
                                     Login

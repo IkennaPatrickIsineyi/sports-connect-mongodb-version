@@ -14,7 +14,6 @@ export const routeSlice = createSlice({
         returnMethod: '',
         isLoggingIn: false,
         loginComplete: true,
-        /* 'samePage', 'pageSwitch','direct' */
         loginType: '',
         nextRouteState: {},
         showSnackbar: false,

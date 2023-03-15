@@ -1,6 +1,6 @@
 
 export const signIn = (event, state, updateState, dispatch,
-    loadUserData, loginComplete, remoteRequest, navigate, openSnackbar, toggleBlockView) => {
+    loadUserData, remoteRequest, navigate, openSnackbar, toggleBlockView) => {
 
     console.log(state);
     event.preventDefault();

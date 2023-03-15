@@ -2,7 +2,6 @@
 const getHomePage = (state, updateState, remoteRequest, dispatch,
     loadUserData, openSnackbar, navigate, toggleBlockView) => {
 
-    console.log('getHomePage')
     updateState({ checking: true });
 
     const showSnackBar = (message, severity) => {
@@ -11,9 +10,6 @@ const getHomePage = (state, updateState, remoteRequest, dispatch,
 
     const payload = { method: "get", credentials: 'include' };
     const callback = (body) => {
-        //updateState({ frontPageData: body.result.frontPage, userData: body.result.userData }); 
-        //dispatch(loadFrontPageData(body.result.frontPage));
-        //dispatch(loadUserData(body.result.userData));
         if (body?.result) {
 
             const userData = body.userData;

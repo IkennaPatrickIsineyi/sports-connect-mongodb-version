@@ -1,4 +1,7 @@
-import { Avatar, Box, Card, CardContent, CardHeader, CardMedia, Container, CssBaseline, Divider, Grid, List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
+import {
+    Avatar, Box, Card, CardHeader, Container, List,
+    ListItem, ListItemText, Paper
+} from "@mui/material";
 import { useState } from "react";
 import sampleImg from '../images/icons8-doctor-male-48.png';
 import { useLocation } from "react-router-dom";

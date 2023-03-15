@@ -1,13 +1,15 @@
-import { Autocomplete, Box, Button, Card, CardContent, Divider, FormControl, FormControlLabel, Grid, IconButton, InputLabel, List, ListItem, ListItemIcon, MenuItem, Radio, RadioGroup, Select, TextField, Typography } from "@mui/material";
-import { Container } from "@mui/material";
+import {
+    Box, Button, Card, CardContent, Divider, FormControl,
+    Grid, InputLabel, List, ListItem, ListItemIcon, MenuItem,
+    Select, TextField, Typography
+} from "@mui/material";
 import Submit from '@mui/icons-material/Send'
 import { useState } from "react";
 import { signUp, validateInput } from "./registerLogic";
 import { remoteRequest } from "../app/model";
 import Delete from "@mui/icons-material/Cancel";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
-import { loadUserData } from '../app/userDataSlice';
+import { useDispatch } from 'react-redux';
 
 import { openSnackbar } from '../app/routeSlice';
 import { sports } from "./sports";

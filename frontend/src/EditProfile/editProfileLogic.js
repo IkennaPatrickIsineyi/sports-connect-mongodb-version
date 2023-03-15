@@ -1,7 +1,7 @@
 
 
 export const editProfile = (event, state, updateState, dispatch, type,
-    reRouteRequest, remoteRequest, openSnackbar, navigate, logOutUser, toggleBlockView) => {
+    remoteRequest, openSnackbar, navigate, logOutUser, toggleBlockView) => {
     console.log('editProfile');
     //const email = state.email;
 

@@ -12,13 +12,11 @@ export const logOut = (event, state, updateState, dispatch, openSnackbar,
 
     const callback = (body) => {
         if (body?.result) {
-
             console.log('Logout success', 'success');
-
-            localStorage.removeItem('user');
-            dispatch(logOutUser())
+            localStorage.removeItem('user');//delete user record from device
+            dispatch(logOutUser());//delete user record from redux store
             showSnackBar('Logged out', 'success');
-            navigate('/login');
+            navigate('/login');//Go to login page
         }
         else if (body?.error === 'not-logged-in') {
             localStorage.removeItem('user');
@@ -30,11 +28,9 @@ export const logOut = (event, state, updateState, dispatch, openSnackbar,
         updateState, toggleBlockView, dispatch);
 };
 
-
+//Fetch email or username of this user
 export const editProfile = (event, state, updateState, type, dispatch,
-    reRouteRequest, remoteRequest, navigate, openSnackbar, toggleBlockView) => {
-    console.log('editProfile');
-    //const email = state.email;
+    remoteRequest, navigate, openSnackbar, toggleBlockView) => {
 
     const showSnackBar = (message, severity) => {
         dispatch(openSnackbar({ message: message, severity: severity }))
@@ -64,8 +60,6 @@ export const editProfile = (event, state, updateState, type, dispatch,
 
 export const getProfile = (event, state, updateState, dispatch, remoteRequest,
     navigate, openSnackbar, toggleBlockView) => {
-    console.log('getProfile');
-    //const email = state.email;
 
     const showSnackBar = (message, severity) => {
         dispatch(openSnackbar({ message: message, severity: severity }))
@@ -88,6 +82,4 @@ export const getProfile = (event, state, updateState, dispatch, remoteRequest,
     }
 
     remoteRequest('profile', payload, showSnackBar, callback, updateState, toggleBlockView, dispatch);
-
-
 } 

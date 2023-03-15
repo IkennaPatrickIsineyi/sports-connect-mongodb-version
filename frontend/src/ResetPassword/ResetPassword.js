@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { remoteRequest } from "../app/model";
 import { openSnackbar, toggleBlockView } from "../app/routeSlice";
-import { snackBar } from "../app/SharedComponent";
 import { submitPassword } from "./resetPasswordLogic";
 
 function ResetPassword() {

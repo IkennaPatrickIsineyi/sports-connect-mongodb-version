@@ -1,13 +1,11 @@
 import { Box, Card, CardContent, CircularProgress } from "@mui/material";
 import { Container } from "@mui/system";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Home from "../Home/Home";
 import { remoteRequest } from "../app/model";
 import { getHomePage } from "./indexPageLogic";
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { dataUsed } from '../app/frontPageSlice';
 import { loadUserData } from '../app/userDataSlice';
 import { openSnackbar, toggleBlockView } from '../app/routeSlice';
 
@@ -16,12 +14,9 @@ function IndexPage() {
     const location = useLocation();
     const dispatch = useDispatch();
 
-    const userData = useSelector((state) => state.userData);
-    const isLoggingIn = useSelector((state) => state.route.isLoggingIn);
-
 
     const [state, setState] = useState({
-        data: location.state, checking: false, dataUsed: dataUsed,
+        data: location.state, checking: false,
         networkIssue: false,
         complete: false
     });
@@ -34,8 +29,7 @@ function IndexPage() {
 
     const data = state.data;
 
-    console.log('data?.frontPage', data, 'userData', userData, 'location state', location.state);
-
+    //if frontpage data exists, load home page, else, query the server for the frontpage data
     return (
         <>
             {(data)
@@ -58,6 +52,7 @@ function IndexPage() {
                             </CardContent>
                         </Card>
                     </Container>
+                    {/* Checking was used to prevent multiple requests being sent */}
                     {(!state.checking) ? getHomePage(state, updateState,
                         remoteRequest, dispatch, loadUserData, openSnackbar,
                         navigate, toggleBlockView) : null}

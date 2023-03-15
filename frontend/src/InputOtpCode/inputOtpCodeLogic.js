@@ -1,7 +1,6 @@
 
 export const verifyOtp = (event, state, updateState, navigate,
     remoteRequest, openSnackbar, dispatch, toggleBlockView) => {
-    console.log('verifyOtp');
     const otp = state.otp;
 
     event.preventDefault();

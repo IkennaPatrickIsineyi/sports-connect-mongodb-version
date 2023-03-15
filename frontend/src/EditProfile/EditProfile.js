@@ -1,10 +1,13 @@
-import { Button, Card, CardContent, Container, Divider, FormControl, FormControlLabel, Grid, Radio, RadioGroup, TextField, Typography } from "@mui/material";
+import {
+    Button, Card, CardContent, Divider, FormControl,
+    Grid, TextField, Typography
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { editProfile, validateInput } from "./editProfileLogic";
 import { useDispatch } from "react-redux";
-import { reRouteRequest, openSnackbar, toggleBlockView } from "../app/routeSlice";
+import { openSnackbar, toggleBlockView } from "../app/routeSlice";
 import { remoteRequest } from "../app/model";
 const { logOutUser } = require("../app/userDataSlice");
 
@@ -43,7 +46,7 @@ function EditProfile() {
                 validateInput(state, updateState, remoteRequest, dispatch,
                     openSnackbar, 'email', state.inputEmail.value, 'inputEmail', () => {
                         editProfile(event, state, updateState, dispatch, 'email',
-                            reRouteRequest, remoteRequest, openSnackbar, navigate,
+                            remoteRequest, openSnackbar, navigate,
                             logOutUser, toggleBlockView)
                     })
 
@@ -56,7 +59,7 @@ function EditProfile() {
                 validateInput(state, updateState, remoteRequest, dispatch,
                     openSnackbar, 'username', state.inputUsername.value, 'inputUsername', () => {
                         editProfile(event, state, updateState, dispatch, 'username',
-                            reRouteRequest, remoteRequest, openSnackbar, navigate, logOutUser, toggleBlockView)
+                            remoteRequest, openSnackbar, navigate, logOutUser, toggleBlockView)
                     });
             }
         }
