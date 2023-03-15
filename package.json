@@ -4,8 +4,8 @@
   "description": "Backend of digital market application",
   "main": "index.js",
   "scripts": {
-    "test": "SET NODE_ENV=test && mocha",
-    "start": "SET NODE_ENV=dev  && node server.js"
+    "test": " mocha",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
