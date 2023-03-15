@@ -167,11 +167,14 @@ function RootLayout() {
 
             {openSnackbar && snackBar(message, severity, dispatch)}
 
-            <Outlet />
+            <Paper sx={{ pb: 5 }}>
+                <Outlet />
+            </Paper>
+
 
             {userInfo?.username && ((window.innerWidth) < 450) ?
 
-                <Paper position='fixed' sx={{ bottom: 0, right: 0, left: 0 }} elevation={3}>
+                <Paper position='fixed' sx={{ bottom: 0, right: 0, left: 0, position: 'fixed' }} elevation={3}>
                     <BottomNavigation showLabels >
                         {/*  Bottom navigation bar */}
                         <BottomNavigationAction label='Profile' icon={<Profile />}
