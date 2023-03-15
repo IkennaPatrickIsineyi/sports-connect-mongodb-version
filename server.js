@@ -45,7 +45,7 @@ app.use(session({
 const PORT = process.env.PORT || 7972;
 
 //define dir path
-const dir = path.join(__dirname, '..', 'frontend', 'build');
+const dir = path.join(__dirname, 'frontend', 'build');
 
 //load urlencoded middleware
 app.use(express.urlencoded({ extended: true }));
@@ -68,7 +68,7 @@ app.use("/api", router);
 
 //define route for every other get requests not related to /api path
 app.get("/*", function (req, res) {
-	const indexPagePath = path.join(__dirname, '..', 'frontend', 'build', 'index.html');
+	const indexPagePath = path.join(__dirname, 'frontend', 'build', 'index.html');
 	res.sendFile(indexPagePath);
 });
 
