@@ -181,7 +181,7 @@ exports.getProfileData = (user, result) => {
 exports.getInterests = (user, result) => {
 	sql.all("select interest from interesttb where email in \
 	(select email from usertb where \
-	email=? or phone=?)", [user], result);
+	email=? or phone=?)", [user, user], result);
 };
 
 //get profile details of user
