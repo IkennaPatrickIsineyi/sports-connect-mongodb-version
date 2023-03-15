@@ -174,7 +174,7 @@ exports.updateUsername = (newUsername, user, result) => {
 //get details of this user
 exports.getProfileData = (user, result) => {
 	sql.all("select email, phone,username, profile_picture \
-	 from usertb where email=? or phone=?", [user], result);
+	 from usertb where email=? or phone=?", [user, user], result);
 };
 
 //get interests of this user
