@@ -58,8 +58,6 @@ exports.register = (username, email, password, phone, interestList, result) => {
 
 	const finalInterestList = [];
 
-	console.log('password ', password, 'phone ', phone);
-
 	//first save personal data
 	sql.run("insert into usertb(username, email,password,\
 		phone) values(?,?,?,?)", [username, email, password, phone],
@@ -73,17 +71,14 @@ exports.register = (username, email, password, phone, interestList, result) => {
 				//The number of (?,?,?) in the query depends on the length of the interest array
 				finalQuery = finalQuery + ('(?,?),'.repeat(interestList.length)) + ';'
 				finalQuery = finalQuery.replace(',;', ';');
-				console.log(finalQuery);
 
 				//Arrange the parameters in the order they should be used
 				interestList = interestList.map((item, indx) => {
-					//	finalQuery += `(?,?,?) ${(indx + 1 < interestList.length) ? ',' : ''}`;
-					//finalInterestList.push(...[item, email, phone]);
+					//Create an array of interest,email,interest,email,...,interest,email sequence 
 					finalInterestList.push(...[item, email])
 					return [item, email];
 				});
 
-				console.log(interestList, finalInterestList);
 				sql.run(finalQuery, finalInterestList, result); //
 			}
 		});

@@ -3,16 +3,21 @@
 const db = require('../models/model.js');
 //import bcrypt for password encryption and comparison 
 const bcrypt = require('bcrypt');
+//For generating OTP code
 const otpGen = require('otp-generator');
+//For sending emails
 const mailer = require('nodemailer');
+//For sending API requests
 const got = require('got');
-//const  fetch   = require('node-fetch');
+//For creating formdata for API request
 const FormData = require('form-data');
 
 
-//create database tables, triggers and admin. 
+//create database tables and triggers
 //This should be done everytime the server boots
 exports.setupDatabase = (callback) => {
+	//List of functions for creating the databases and triggers
+	//The functions will be called recursively
 	const tables = [db.createUsertb, db.createInteresttb, db.createEmailHashtb];
 
 	let count = 0;
@@ -37,27 +42,23 @@ exports.setupDatabase = (callback) => {
 
 //check if user is logged in: user required to log in first else request fails
 exports.isLoggedIn = (req, res, next) => {
-	//console.log('isLoggedIn called with user = ', req.session.user); 
-	if (req.session.user) return next();
+	if (req.session.user) return next(); //User is logged in, hence proceed to next middleware
 	else return res.send({ error: 'not-logged-in' });
 };
 
 //check if user is not logged in: user required to log out first else request fails
 exports.isNotLoggedIn = (req, res, next) => {
-	//console.log('isNotLoggedIn called with user = ', req.session.user);
-	if (!req.session.user) return next();
+	if (!req.session.user) return next(); //User is not logged in, hence proceed to next middleware
 	else return res.send({ error: 'already-logged-in' });
 };
 
-
-
 //validate login credentials. and log in user
 exports.login = (req, res) => {
-
 	const body = req.body;
 	const userId = body?.userId;
 	const password = body.password;
 
+	//Fetch user's password hash for comparison
 	db.getPasswordHash(userId, function (err, result) {
 		if (err) {
 			//error occurred
@@ -65,7 +66,8 @@ exports.login = (req, res) => {
 			return res.send({ error: 'failed', errMsg: 'retrieval' });
 		}
 		else if (result.length) {
-			//email exists
+			//email exists in database. 
+			//Hash password and compare it with the hash from the database
 			bcrypt.compare(password, result[0].password,
 				function (err, match) {
 					if (match) {
@@ -137,12 +139,15 @@ const registerUser = (req, res, data) => {
 
 //log out user
 exports.logout = (req, res) => {
+	//Reset session Id by generating a new one.
+	// This will automatically delete the user's session, logging them out
 	req.session.regenerate(function (err) {
 		if (err) {
 			console.log('regen error');
 			return res.send({ error: 'saving-error', result: 'logged-out' });
 		}
 		else {
+			//Create new session Id
 			req.session.save(function (err) {
 				if (err) {
 					console.log("saving error");
@@ -156,7 +161,6 @@ exports.logout = (req, res) => {
 		}
 	})
 };
-
 
 //send email
 const sendEmail = (payload, req, res, callback) => {
@@ -180,7 +184,8 @@ const sendEmail = (payload, req, res, callback) => {
 	})
 }
 
-//sends sms to a phone number using smartsmssolution.com api
+//sends sms to a phone number using smartsmssolution.com API
+//You can use any other sms service provider's API
 const sendSMS = (req, res, body, callback) => {
 	const url = 'https://app.smartsmssolutions.com/io/api/client/v1/sms/';
 	const method = 'POST';
@@ -397,9 +402,8 @@ exports.verifyOtp = (req, res) => {
 	}
 }
 
-//change password
+//change password. This is for forgot password, which requires OTP
 exports.changePassword = (req, res) => {
-
 	if (!req.session.otpVerified) {
 		return res.send({ error: 'generic', errMsg: 'Invalid request. OTP not validated' });
 	}
@@ -426,14 +430,15 @@ exports.changePassword = (req, res) => {
 	});
 };
 
-
 //change password of already logged in user. Requires no OTP
 exports.updatePassword = (req, res) => {
+	//Hash the password
 	bcrypt.hash(req.body.password, 10, function (err, passwordHash) {
 		if (err) res.send({
 			error: 'generic',
 			errMsg: 'Something went wrong. Try again later'
 		});
+		//replace the existing password hash with the new password hash
 		db.updatePassword(passwordHash, req.session.user,
 			function (err) {
 				if (err) return res.send({
@@ -453,7 +458,6 @@ exports.updatePassword = (req, res) => {
 
 //get profile data for editing
 exports.getUsername = (req, res) => {
-	console.log('getUsername');
 	db.getUsername(req.session.user, function (err, result) {
 		if (err) {
 			console.log(err);
@@ -476,7 +480,6 @@ exports.getEmail = (req, res) => {
 
 //change the email of this user
 exports.updateEmail = (req, res) => {
-	console.log('updateEmail');
 	db.updateEmail(req.body.email, req.session.user, function (err) {
 		if (err) {
 			console.log(err);
@@ -500,13 +503,15 @@ exports.updateUsername = (req, res) => {
 //get profile data (profile pic, personal details, interests) for display
 exports.getProfileData = (req, res) => {
 	const profile = {}
+	//fetch user's personal data
 	db.getProfileData(req.session.user, function (err, result) {
 		if (err) {
 			console.log(err);
 			return res.send({ error: 'generic', errMsg: 'Something went wrong. Try again later' });
 		}
 		else {
-			profile.profileData = result[0];
+			profile.profileData = result[0];//save personal data
+			//fetch user's interests
 			db.getInterests(req.session.user, function (err, result) {
 				if (err) {
 					console.log(err);
@@ -569,7 +574,6 @@ exports.getFrontPageItems = (req, res) => {
 
 //Check if a certain column in any record has the given value
 exports.validate = (req, res) => {
-	console.log(req.query.column, req.query.value);
 	db.validate(req.query.column, req.query.value, function (err, result) {
 		if (err) {
 			console.log(err);
@@ -579,23 +583,20 @@ exports.validate = (req, res) => {
 			});
 		}
 		else if (result.length) {
-			console.log('not-available')
 			return res.send({
 				error: 'not-available',
 				errMsg: req.query.column + ' already exists. Choose another value'
 			});
 		}
 		else {
-			console.log('available')
 			return res.send({ result: 'available' });
 		}
 	});
 }
 
-
 //Get all interests of a user
 exports.getUserDetails = (req, res) => {
-	//find all users who have the same interests as this user
+	//find personal details and interests of this particular user
 	db.getUserDetails(req.query.username, function (err, result) {
 		if (err) {
 			console.log(err);
