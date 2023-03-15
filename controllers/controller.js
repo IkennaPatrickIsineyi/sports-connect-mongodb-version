@@ -37,7 +37,7 @@ exports.setupDatabase = (callback) => {
 
 //check if user is logged in: user required to log in first else request fails
 exports.isLoggedIn = (req, res, next) => {
-	//console.log('isLoggedIn called with user = ', req.session.user);
+	//console.log('isLoggedIn called with user = ', req.session.user); 
 	if (req.session.user) return next();
 	else return res.send({ error: 'not-logged-in' });
 };

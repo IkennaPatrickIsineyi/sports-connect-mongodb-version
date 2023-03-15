@@ -73,7 +73,7 @@ function RootLayout() {
     }
 
     const handleBlockViewClose = (event) => {
-        dispatch(toggleBlockView());
+        dispatch(toggleBlockView({ blockView: false }));
     }
 
     const handleEditUsername = (event) => {

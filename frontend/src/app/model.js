@@ -1,5 +1,5 @@
-//const rootUrl = 'http://localhost:3422/api/';
-const rootUrl = '';
+const rootUrl = '/api/';
+//const rootUrl = '';
 
 exports.remoteRequest = (url, payload,
     showSnackBar, callback, updateState, toggleBlockView, dispatch) => {
