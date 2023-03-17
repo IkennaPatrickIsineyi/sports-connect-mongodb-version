@@ -1,13 +1,15 @@
 //routers/dm.router.js
 
 //import controllers
-const controller = require('../controllers/controller.js');
+const controller = require('../controllers/controllerWithMongo');
 
 //create Router instance from express import
 const router = require('express').Router();
 
 //routes definitions//
 console.log('router called...');
+//Test database
+router.get('/test/:type', controller.testdb);
 //login: check if logged in. If not, log user in
 router.post('/login', controller.isNotLoggedIn, controller.login);
 //log out user if the user is logged in

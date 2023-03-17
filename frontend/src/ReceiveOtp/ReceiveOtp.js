@@ -27,7 +27,7 @@ function ReceiveOtp() {
                     <CardContent>
                         <Grid container rowSpacing={2}>
                             <Grid item xs={12} display='flex' justifyContent='center' alignItems='center'>
-                                To complete your registration, an OTP is required via SMS or phone call.
+                                To complete your registration, an OTP is required via Email to verify the email
                                 Click the button below to receive the OTP
                             </Grid>
 

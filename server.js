@@ -1,10 +1,7 @@
 //dm.app.js
 
 //import router
-const router = require('./routers/dm.router.js');
-
-//import setupDatabase from controller
-const setupDatabase = require('./controllers/controller.js').setupDatabase;
+const router = require('./routers/router.js');
 
 //import express module
 const express = require('express');
@@ -72,19 +69,15 @@ app.get("/*", function (req, res) {
 	res.sendFile(indexPagePath);
 });
 
-//define callback function for launching server
-const launchServer = () => {
-	app.listen(PORT, (error) => {
-		if (error) throw error;
-		else {
-			console.log("Server launched on port ", PORT);
-			app.emit('server_started');
-		}
-	});
-};
+//launch server
+app.listen(PORT, (error) => {
+	if (error) throw error;
+	else {
+		console.log("Server launched on port ", PORT);
+		app.emit('server_started');
+	}
+});
 
-//call setupDatabase with callback to launch server after setting up database.
-setupDatabase(launchServer);
 
 //export app instance for testing purpose
 module.exports = app;
