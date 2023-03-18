@@ -264,6 +264,7 @@ const sendOTP = (req, res, email, phone, type) => {
         else {
             if (type === 'registration') {
                 const successCallback = (result) => {
+                    console.log(result);
                     if (result.insertedCount) {
                         //send email
                         const Emailpayload = {
@@ -508,21 +509,14 @@ exports.updateUsername = (req, res) => {
 
 //get profile data (profile pic, personal details, interests) for display
 exports.getProfileData = (req, res) => {
-    const profile = {};
-
     const successCallback = (result) => {
-        profile.profileData = result;//save personal data
-        //fetch user's interests
-        db.getInterests(req.session.user, function (err, result) {
-            if (err) {
-                console.log(err);
-                return res.send({ error: 'generic', errMsg: 'Something went wrong. Try again later' });
-            }
-            else {
-                profile.interests = result;
-                res.send({ result: profile });
-            }
-        })
+        const profile = {
+            profileData: {
+                phone: result?.phone, email: result?.email,
+                username: result?.username, profile_picture: result?.profile_picture
+            }, interests: result.interests
+        }
+        res.send({ result: profile });
     };
 
     const errorCallback = (err) => {

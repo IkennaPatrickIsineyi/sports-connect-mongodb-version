@@ -46,7 +46,7 @@ function ReceiveOtp() {
                     <CardContent>
                         <Grid container rowSpacing={2}>
                             <Grid item xs={12} display='flex' justifyContent='center' alignItems='center'>
-                                Enter and submit the OTP code that we just sent to your Phone number via SMS
+                                Enter and submit the OTP code that we just sent to your Email address
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField fullWidth variant="outlined" label='OTP Code' type={'number'}

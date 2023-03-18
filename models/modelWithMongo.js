@@ -8,31 +8,28 @@ const dbName = (process.env.NODE_ENV === 'production') ? 'sportsConnect' : 'test
 //import connection
 const mongo = require('./mongoConfig.js');
 const db = mongo.db(dbName);
-db.collection('user').drop();
+/* db.collection('user').drop();
 db.collection('interest').drop();
+db.collection('emailHash').drop();
+db.collection('emailHash').dropIndexes(); */
 console.log('Mongodb connection imported')
 
-/* //Collections//
-**
+/* //Collections// 
+
 User collection ::=>
 email: pk,string;
 password: string;
 phone: string, unique;
 username: string, unique;
 profile_picture: string;
+interests:[];
 email_verified: boolean, default(false);
+email_hash:string;
 
-**
-Interest collection ::=>
-id: pk, Integer;
-interest: string;
-email: string, fk(User(email));
-
-**
-email hash collection ::=>
-hash: string;
-email: pk,string;
-
+EmailHash collection ::=>
+email: string
+hash: string
+ 
  */
 
 
@@ -54,180 +51,154 @@ db.collection('user').createIndex({ username: 1 }, { unique: true });
 //phone field
 db.collection('user').createIndex({ phone: 1 }, { unique: true });
 
-//Interest collection indexing
-//Email and interest must not be the same for any two records
-db.collection('interest').createIndex({ email: 1, interest: 1 }, { unique: true });
-
-//EmailHash collection indexing
-//Email and interest must not be the same for any two records
-db.collection('emailHash').createIndex({ email: 1 }, { unique: true });
 
 //query database//
 
 //test CRUD queries
 exports.testDb = (type, successCallback, errorCallback) => {
-    if (type === 'insertmany') {
-        db.collection('interest').insertMany([1, 2, 3, 4, 5, 6].map(item => {
-            return { interest: `John1${item}`, email: item * 10 }
+    if (type === 'register1') {
+        const interest = ['swimming', 'soccer', 'running', 'tennis'];
+        const data = {
+            username: 'ikp', email: 'ikp@ikp', phone: '5785785785',
+            password: '123', profile_prcture: 'daa.ksd', email_verified: false
+        };
+        const wildCards = [1, 2, 3, 4, 5, 6, 7, 8];
+        db.collection('user').insertMany(wildCards.map(item => {
+            return {
+                username: data.username.toString() + item,
+                email: data.email.toString() + item,
+                phone: data.phone.toString() + item,
+                password: data.password.toString() + item,
+                profile_prcture: data.profile_prcture.toString() + item,
+                email_verified: Boolean(data.email_verified),
+                interests: Array.from(interest)
+            }
+        })).then(successCallback, errorCallback);
+    }
+    else if (type === 'register2') {
+        const interest = ['swimming', 'soccer'];
+        const data = {
+            username: 'ikp', email: 'ikp@ikp', phone: '5785785785',
+            password: '123', profile_prcture: 'daa.ksd', email_verified: false
+        };
+        const wildCards = [11, 21, 31, 41, 51, 61, 71, 81];
+        db.collection('user').insertMany(wildCards.map(item => {
+            return {
+                username: data.username.toString() + item,
+                email: data.email.toString() + item,
+                phone: data.phone.toString() + item,
+                password: data.password.toString() + item,
+                profile_prcture: data.profile_prcture.toString() + item,
+                email_verified: Boolean(data.email_verified),
+                interests: Array.from(interest)
+            }
+        })).then(successCallback, errorCallback);
+    }
+    else if (type === 'register3') {
+        const interest = ['rocking', 'dancing'];
+        const data = {
+            username: 'ikp', email: 'ikp@ikp', phone: '5785785785',
+            password: '123', profile_prcture: 'daa.ksd', email_verified: false
+        };
+        const wildCards = [111, 211, 311, 411, 511, 611, 711, 811];
+        db.collection('user').insertMany(wildCards.map(item => {
+            return {
+                username: data.username.toString() + item,
+                email: data.email.toString() + item,
+                phone: data.phone.toString() + item,
+                password: data.password.toString() + item,
+                profile_prcture: data.profile_prcture.toString() + item,
+                email_verified: Boolean(data.email_verified),
+                interests: Array.from(interest)
+            }
+        })).then(successCallback, errorCallback);
+    }
+    else if (type === 'register4') {
+        const interest = ['swimming', 'soccer'];
+        const data = {
+            username: 'ikp', email: 'ikp@ikp', phone: '5785785785',
+            password: '123', profile_prcture: 'daa.ksd', email_verified: false
+        };
+        const wildCards = [121, 212, 312, 412, 512, 612, 712, 812];
+        db.collection('user').insertMany(wildCards.map(item => {
+            return {
+                username: data.username.toString() + item,
+                email: data.email.toString() + item,
+                phone: data.phone.toString() + item,
+                password: data.password.toString() + item,
+                profile_prcture: data.profile_prcture.toString() + item,
+                email_verified: Boolean(data.email_verified),
+                interests: Array.from(interest)
+            }
         })).then(successCallback, errorCallback);
     }
     else if (type === 'find') {
-        db.collection('interest').find().toArray().then(successCallback, errorCallback);
-    }
-    else if (type === 'findone') {
-        db.collection('interest').findOne({ email: 40 }).then(successCallback, errorCallback);
-    }
-    else if (type === 'delete') {
-        db.collection('interest').deleteMany({ interest: 'John11' }).then(successCallback, errorCallback);
-    }
-    else if (type === 'update') {
-        db.collection('interest').updateMany({ interest: 'John11' }, { $set: { email: 442 } }).then(successCallback, errorCallback);
-    }
-    else if (type === 'transaction') {
-        interestList = ['sami1', 'dann', 'sol'];
-        email = 'sam@sam.sam';
-        const session = mongo.startSession();
-        try {
-            session.startTransaction();
+        const userId = 'ikp@ikp812'
 
-            console.log('started');
-
-            //insert personal data into user collection
-            db.collection('user').insertOne({
-                username: 'Sam', email: email,
-                password: "gksy5yurhjsfjh", phone: '7578764764'
-            }, { session }).then((insertId) => {
-                console.log(1);
-                //insert user's interests into interest collection
-                db.collection('interest').insertMany(interestList.map((interest) => {
-                    return { interest, email }
-                }), { session }).then((result1) => {
-                    //transaction succeeded
-                    //commit transaction to database
-                    session.commitTransaction().then((result2) => {
-                        //commit succeeded
-                        //end transaction session and return result
-                        // and execution to controller
-                        session.endSession();
-                        successCallback(result1);
-                    }, (error) => {
-                        //commit failed
-                        //end transaction session and return error
-                        // and execution to controller
-                        session.endSession();
-                        errorCallback(error);
-                    });
-                }, (error) => {
-                    //transaction failed
-                    //hence rollback changes
-                    session.abortTransaction().then(errorCallback);
-                })
-            })
-        } catch (error) {
-            //Catch any error or exceptions that occured.
-            //Note that there are some exceptions or errors that it cannot catch
-            console.log('transaction aborted');
-            session.abortTransaction();
-            errorCallback(error);
-        }
+        db.collection('user').findOne({ $or: [{ email: userId }, { phone: userId }] },
+            { projection: { interests: 1, _id: 0 } }).then((result) => {
+                db.collection('user').find({
+                    interests: { $elemMatch: { $in: result.interests } },
+                    email: { $ne: userId }, phone: { $ne: userId }
+                }, { projection: { username: 1, interests: 1, _id: 0 } }).toArray().then(successCallback, errorCallback)
+            }, errorCallback)
+    }
+    else if (type === 'findall') {
+        db.collection('user').find().toArray().then(successCallback, errorCallback);
     }
 };
 
 //get stored password hash of user: for authentication 
 exports.getPasswordHash = (user, successCallback, errorCallback) => {
     db.collection('user').findOne({ email: user },
-        { password: 1, username: 1, email_verified: 1 }).then(successCallback, errorCallback);
+        { projection: { password: 1, username: 1, email_verified: 1 } }).then(successCallback, errorCallback);
 };
 
-//save personal data of user
-exports.savePersonalData = (username, email, password,
-    phone, successCallback, errorCallback) => {
-    db.collection('user').insertOne({
-        username: username,
-        email: email, password: password, phone: phone
-    }).then(successCallback, errorCallback);
-};
 
 //Query usertb for data
 exports.validate = (column, value, successCallback, errorCallback) => {
     db.collection('user').findOne({ [column]: value },
-        { username: 1 }).toArray().then(successCallback, errorCallback);
+        { username: 1 }).then(successCallback, errorCallback);
 };
 
-//add new inventory
+//register a user
 exports.register = (username, email, password, phone,
     interestList, successCallback, errorCallback) => {
-    //create a client session
-    const session = mongo.startSession();
-    //Start transaction with this client session
-    try {
-        session.startTransaction();
-        //insert personal data into user collection
-        db.collection('user').insertOne({
-            username: username, email: email,
-            password: password, phone: phone
-        }, { session }).then((insertId) => {
-            //insert user's interests into interest collection
-            db.collection('interest').insertMany(interestList.map((interest) => {
-                return { interest, email }
-            }), { session }).then((result1) => {
-                //transaction succeeded
-                //commit transaction to database
-                session.commitTransaction().then((result2) => {
-                    //commit succeeded
-                    //end transaction session and return result
-                    // and execution to controller
-                    session.endSession();
-                    successCallback(result1);
-                }, (error) => {
-                    //commit failed
-                    //end transaction session and return error
-                    // and execution to controller
-                    session.endSession();
-                    errorCallback(error);
-                });
-            }, (error) => {
-                //transaction failed
-                //hence rollback changes
-                session.abortTransaction().then(errorCallback);
-            })
-        })
-    } catch (error) {
-        //Catch any error or exceptions that occured.
-        //Note that there are some exceptions or errors that it cannot catch
-        console.log('transaction aborted');
-        session.abortTransaction();
-        errorCallback(error);
-    }
+    db.collection('user').insertOne({
+        username: username.toString(),
+        email: email.toString(),
+        password: password.toString(),
+        phone: phone.toString(),
+        interest: Array.from(interestList)
+    }).then(successCallback, errorCallback);
 };
 
-exports.findLikeMinds = (user, result) => {
-
-    sql.all("select u.profile_picture, u.username, i.interest from \
-	interesttb as i inner join usertb as u on i.email=u.email \
-	where i.interest in (select interest from interesttb where email in \
-	(select email from usertb where email=? or phone=?))\
-	and u.email <> ? and u.phone<>?",
-        [user, user, user, user], result);
+exports.findLikeMinds = (userId, successCallback, errorCallback) => {
+    //first grab the interests of the interests of this user
+    db.collection('user').findOne({ $or: [{ email: userId }, { phone: userId }] },
+        { projection: { interests: 1, _id: 0 } }).then((result) => {
+            //then use those interests to find OTHER users who have any of those interests
+            db.collection('user').find({
+                interests: { $elemMatch: { $in: result.interests } },
+                email: { $ne: userId }, phone: { $ne: userId }
+            }, { projection: { username: 1, interests: 1, _id: 0 } }).toArray().then(successCallback, errorCallback)
+        }, errorCallback)
 };
 
 //get user's username and email verification status
 exports.getUserIdentity = (userId, successCallback, errorCallback) => {
     db.collection('user').findOne({ $or: [{ email: userId }, { phone: userId }] },
-        { username: 1, email_verified: 1 }).then(successCallback, errorCallback);
+        { projection: { username: 1, email_verified: 1 } }).then(successCallback, errorCallback);
 };
-
-//save interests of user
-exports.saveInterests = (interestList, email, successCallback, errorCallback) => {
-    db.collection('interest').insertMany(interestList.map(interest => {
-        return { interest, email }
-    })).then(successCallback, errorCallback);
-};
-
 
 //Save the hash send to a user's email
 exports.saveEmailVerificationHash = (hash, email, successCallback, errorCallback) => {
-    db.collection('emailHash').insertOne({ hash: hash, email: email }).then(successCallback, errorCallback);
+    db.collection('emailHash').insertOne({
+        $set: {
+            hash: hash,
+            email: email
+        }
+    }).then(successCallback, errorCallback);
 };
 
 //Save the hash send to a user's email
@@ -235,13 +206,16 @@ exports.verifyEmail = (hash, successCallback, errorCallback) => {
     db.collection('emailHash').deleteMany({ hash: hash }).then(successCallback, errorCallback);
 };
 
-//Set email verified to true
+//Set email verified to true.
+//First grab the email associated with this hash
 exports.updateEmailVerified = (hash, successCallback, errorCallback) => {
-    db.collection('user').updateOne({
-        email: {
-            $in: $db.collection('emailHash').find({ hash: hash }, { email: 1, _id: 0 })
-        }
-    }, { $set: { email_verified: true } }).then(successCallback, errorCallback)
+    db.collection('emailHash').find({ hash: hash },
+        { projection: { email: 1, _id: 0 } }).toArray().then((hashArr) => {
+            //Then use that email to find the user's record and 
+            //set email verified to true.
+            db.collection('user').updateOne({ email: { $in: hashArr.map(hashObj => hashObj.email) } },
+                { $set: { email_verified: true } }).then(successCallback, errorCallback)
+        }, errorCallback);
 };
 
 //change password
@@ -261,7 +235,7 @@ exports.getEmail = (user, successCallback, errorCallback) => {
     db.collection('user').findOne({
         $or: [{ email: user },
         { phone: user }]
-    }, { email: 1 }).then(successCallback, errorCallback);
+    }, { projection: { email: 1 } }).then(successCallback, errorCallback);
 };
 
 //get username of this user for editing
@@ -269,7 +243,7 @@ exports.getUsername = (user, successCallback, errorCallback) => {
     db.collection('user').findOne({
         $or: [{ email: user },
         { phone: user }]
-    }, { username: 1 }).then(successCallback, errorCallback);
+    }, { projection: { username: 1 } }).then(successCallback, errorCallback);
 };
 
 //update email of this user 
@@ -290,22 +264,12 @@ exports.updateUsername = (newUsername, user, successCallback, errorCallback) => 
 //get details of this user
 exports.getProfileData = (user, successCallback, errorCallback) => {
     db.collection('user').findOne({ $or: [{ email: user }, { phone: user }] },
-        { email: 1, phone: 1, username: 1, profile_prcture: 1 }).then(successCallback, errorCallback);
+        { projection: { email: 1, phone: 1, username: 1, profile_prcture: 1, interests: 1 } }).then(successCallback, errorCallback);
 };
 
-//get interests of this user
-exports.getInterests = (user, successCallback, errorCallback) => {
-    db.collection('interest').find({
-        email: {
-            $in: $db.collection('user').find({
-                $or: [{ email: user }, { phone: user }]
-            }, { email: 1 })
-        }
-    }, { interest: 1 }).toArray().then(successCallback, errorCallback);
-};
 
 //get profile details of user
-exports.getProfile = (email, successCallback, errorCallback) => {
-    db.collection('user').findOne({ email: email },
-        { username: 1, email: 1, phone: 1, profile_prcture: 1 }).then(successCallback, errorCallback);
+exports.getProfile = (username, successCallback, errorCallback) => {
+    db.collection('user').findOne({ username: username },
+        { projection: { username: 1, email: 1, phone: 1, profile_prcture: 1 } }).then(successCallback, errorCallback);
 };
