@@ -1,9 +1,9 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 //import AppBar from '@mui/material/AppBar';
 import {
-    AppBar, Box, IconButton, Toolbar, Typography, Menu, MenuItem,
+    AppBar, Box, IconButton, Toolbar, Typography, MenuItem,
     ListItemIcon, Snackbar, ListItemText, BottomNavigation, BottomNavigationAction,
-    Paper, Modal, CircularProgress, Card, CardContent, CardHeader, Divider
+    Paper, Modal, CircularProgress, Card, CardHeader, Divider
 } from "@mui/material";
 
 import Profile from "@mui/icons-material/AccountCircleRounded";
@@ -15,7 +15,7 @@ import EmailIcon from "@mui/icons-material/Email";
 
 import EditIcon from "@mui/icons-material/EditAttributesRounded";
 import { logOutUser, loadUserData } from '../app/userDataSlice';
-import { closeSnackbar, reRouteRequest, toggleBlockView } from '../app/routeSlice';
+import { closeSnackbar, toggleBlockView } from '../app/routeSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { editProfile, getProfile, logOut } from "./rootLayoutLogic";
 import { useMemo, useState } from "react";
