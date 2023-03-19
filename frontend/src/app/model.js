@@ -1,4 +1,4 @@
-const rootUrl = '/api/';
+const rootUrl = (process.env.NODE_ENV === 'production') ? '/api/' : 'http://localhost:3422/api/';
 //const rootUrl = '';
 
 //For all making API calls

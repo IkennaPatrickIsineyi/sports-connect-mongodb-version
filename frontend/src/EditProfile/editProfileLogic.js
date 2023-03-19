@@ -23,8 +23,9 @@ export const editProfile = (event, state, updateState, dispatch, type,
 
         const callback = (body) => {
             if (body?.result) {
-                // navigate('/edit-profile', { state: { ...body.result } })
                 showSnackBar('Changes saved', 'success');
+                //localStorage.removeItem('user');//delete user record from device
+                //dispatch(logOutUser());//delete user record from redux store
                 navigate('/', { replace: true });
             }
             else if (body?.error === 'not-logged-in') {

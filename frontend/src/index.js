@@ -5,13 +5,24 @@ import App from './App';
 import store from './app/store';
 import { Provider } from 'react-redux';
 import reportWebVitals from './reportWebVitals';
+import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
+
+let theme = createTheme({
+  palette: { mode: 'dark' }
+});
+theme = responsiveFontSizes(theme);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ThemeProvider>
+
   </React.StrictMode>
 );
 

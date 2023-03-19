@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
     AppBar, Box, IconButton, Toolbar, Typography, Menu, MenuItem,
     ListItemIcon, Snackbar, ListItemText, BottomNavigation, BottomNavigationAction,
-    Paper, Modal, CircularProgress
+    Paper, Modal, CircularProgress, Card, CardContent, CardHeader, Divider
 } from "@mui/material";
 
 import Profile from "@mui/icons-material/AccountCircleRounded";
@@ -42,6 +42,7 @@ function RootLayout() {
     const updateState = (newValue) => {
         setState((previousValue) => { return { ...previousValue, ...newValue } });
     }
+
 
     useMemo(() => {
         //retrieve user's username from localStorage and keeps it in redux store
@@ -176,7 +177,7 @@ function RootLayout() {
 
             {/* Main content of the applicaion. More like the body of the application 
             Bottom padding of 5 was used because of the bottom navigation bar.*/}
-            <Paper sx={{ pb: 5 }}>
+            <Paper sx={{ pb: 5 }} elevation={0}>
                 <Outlet />
             </Paper>
 
@@ -202,25 +203,29 @@ function RootLayout() {
             }
 
             {/* Settings menu definition */}
-            {state.openSettingMenu && <Menu
-                onClose={handleMenuClose}
-                open={state.openSettingMenu}
-                anchorEl={state.menuAnchor}>
+            {state.openSettingMenu &&
+                <Modal open={state.openSettingMenu} onClose={handleMenuClose}>
+                    <Box display='flex' justifyContent='center' alignItems='center'
+                        sx={{ top: '50%', bottom: '50%', right: 0, left: 0, position: 'absolute' }} >
+                        <Card   >
+                            <CardHeader title={'Welcome, ' + userInfo?.username ?? 'Anonymous'} />
+                            <Divider />
 
-                <MenuItem>
-                    {'Welcome, ' + userInfo?.username ?? 'Anonymous'}
-                </MenuItem>
+                            {/* Renders each item in the settings menu from the settingMenuContents array*/}
+                            {settingMenuContents.map(content =>
+                                content && <MenuItem onClick={content?.processor} >
+                                    <ListItemIcon>
+                                        {content?.icon}
+                                    </ListItemIcon>
+                                    {content?.label}
+                                </MenuItem>
+                            )}
 
-                {/* Renders each item in the settings menu from the settingMenuContents array*/}
-                {settingMenuContents.map(content =>
-                    content && <MenuItem onClick={content?.processor}>
-                        <ListItemIcon>
-                            {content?.icon}
-                        </ListItemIcon>
-                        {content?.label}
-                    </MenuItem>
-                )}
-            </Menu>}
+                        </Card>
+                    </Box>
+
+                </Modal>}
+
 
             {/* Circular Progress Indicator that indicates ongoing 
             process that should not be interrupted */}

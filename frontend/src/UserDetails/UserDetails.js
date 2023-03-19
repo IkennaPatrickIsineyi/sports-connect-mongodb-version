@@ -11,7 +11,7 @@ function UserDetails() {
     console.log('location: ', location.state);
     const [state, setState] = useState({
         profile: { ...location.state?.profileData },
-        interest: [...location.state?.interests]
+        interest: [...location.state?.interest]
     });
 
     return (
@@ -26,27 +26,27 @@ function UserDetails() {
                 </Container>
 
                 <List >
-                    <Card>
+                    <Card elevation={5}>
                         <ListItem>
                             <ListItemText primary={'Username'} secondary={state.profile.username} />
                         </ListItem>
                     </Card>
 
-                    <Card>
+                    <Card elevation={5}>
                         <ListItem>
                             <ListItemText primary={'Email'} secondary={state.profile.email} />
                         </ListItem>
                     </Card>
-                    <Card>
+                    <Card elevation={5}>
                         <ListItem>
                             <ListItemText primary={'Phone'} secondary={state.profile.phone} />
                         </ListItem>
                     </Card>
-                    <Card>
+                    <Card elevation={5}>
                         <ListItem>
                             <ListItemText primary={'Interests'} secondary=
-                                {state.interest.map((interestObj, rowIndex) => (
-                                    <ListItemText primary={interestObj.interest} />
+                                {state.interest.map((interestValue, rowIndex) => (
+                                    <ListItemText primary={interestValue} />
 
                                 ))} />
                         </ListItem>

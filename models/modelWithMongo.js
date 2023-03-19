@@ -8,10 +8,8 @@ const dbName = (process.env.NODE_ENV === 'production') ? 'sportsConnect' : 'test
 //import connection
 const mongo = require('./mongoConfig.js');
 const db = mongo.db(dbName);
-/* db.collection('user').drop();
-db.collection('interest').drop();
-db.collection('emailHash').drop();
-db.collection('emailHash').dropIndexes(); */
+/* db.collection('user').drop(); 
+db.collection('emailHash').drop();  */
 console.log('Mongodb connection imported')
 
 /* //Collections// 
@@ -22,7 +20,7 @@ password: string;
 phone: string, unique;
 username: string, unique;
 profile_picture: string;
-interests:[];
+interest:[];
 email_verified: boolean, default(false);
 email_hash:string;
 
@@ -71,7 +69,7 @@ exports.testDb = (type, successCallback, errorCallback) => {
                 password: data.password.toString() + item,
                 profile_prcture: data.profile_prcture.toString() + item,
                 email_verified: Boolean(data.email_verified),
-                interests: Array.from(interest)
+                interest: Array.from(interest)
             }
         })).then(successCallback, errorCallback);
     }
@@ -90,7 +88,7 @@ exports.testDb = (type, successCallback, errorCallback) => {
                 password: data.password.toString() + item,
                 profile_prcture: data.profile_prcture.toString() + item,
                 email_verified: Boolean(data.email_verified),
-                interests: Array.from(interest)
+                interest: Array.from(interest)
             }
         })).then(successCallback, errorCallback);
     }
@@ -109,7 +107,7 @@ exports.testDb = (type, successCallback, errorCallback) => {
                 password: data.password.toString() + item,
                 profile_prcture: data.profile_prcture.toString() + item,
                 email_verified: Boolean(data.email_verified),
-                interests: Array.from(interest)
+                interest: Array.from(interest)
             }
         })).then(successCallback, errorCallback);
     }
@@ -128,7 +126,7 @@ exports.testDb = (type, successCallback, errorCallback) => {
                 password: data.password.toString() + item,
                 profile_prcture: data.profile_prcture.toString() + item,
                 email_verified: Boolean(data.email_verified),
-                interests: Array.from(interest)
+                interest: Array.from(interest)
             }
         })).then(successCallback, errorCallback);
     }
@@ -136,11 +134,11 @@ exports.testDb = (type, successCallback, errorCallback) => {
         const userId = 'ikp@ikp812'
 
         db.collection('user').findOne({ $or: [{ email: userId }, { phone: userId }] },
-            { projection: { interests: 1, _id: 0 } }).then((result) => {
+            { projection: { interest: 1, _id: 0 } }).then((result) => {
                 db.collection('user').find({
-                    interests: { $elemMatch: { $in: result.interests } },
+                    interest: { $elemMatch: { $in: result.interest } },
                     email: { $ne: userId }, phone: { $ne: userId }
-                }, { projection: { username: 1, interests: 1, _id: 0 } }).toArray().then(successCallback, errorCallback)
+                }, { projection: { username: 1, interest: 1, _id: 0 } }).toArray().then(successCallback, errorCallback)
             }, errorCallback)
     }
     else if (type === 'findall') {
@@ -174,14 +172,15 @@ exports.register = (username, email, password, phone,
 };
 
 exports.findLikeMinds = (userId, successCallback, errorCallback) => {
-    //first grab the interests of the interests of this user
+    //first grab the interest of the interest of this user
     db.collection('user').findOne({ $or: [{ email: userId }, { phone: userId }] },
-        { projection: { interests: 1, _id: 0 } }).then((result) => {
-            //then use those interests to find OTHER users who have any of those interests
+        { projection: { interest: 1, _id: 0 } }).then((result) => {
+            console.log(result.interest)
+            //then use those interest to find OTHER users who have any of those interest
             db.collection('user').find({
-                interests: { $elemMatch: { $in: result.interests } },
+                interest: { $elemMatch: { $in: result.interest } },
                 email: { $ne: userId }, phone: { $ne: userId }
-            }, { projection: { username: 1, interests: 1, _id: 0 } }).toArray().then(successCallback, errorCallback)
+            }, { projection: { username: 1, interest: 1, _id: 0 } }).toArray().then(successCallback, errorCallback)
         }, errorCallback)
 };
 
@@ -264,7 +263,7 @@ exports.updateUsername = (newUsername, user, successCallback, errorCallback) => 
 //get details of this user
 exports.getProfileData = (user, successCallback, errorCallback) => {
     db.collection('user').findOne({ $or: [{ email: user }, { phone: user }] },
-        { projection: { email: 1, phone: 1, username: 1, profile_prcture: 1, interests: 1 } }).then(successCallback, errorCallback);
+        { projection: { email: 1, phone: 1, username: 1, profile_prcture: 1, interest: 1 } }).then(successCallback, errorCallback);
 };
 
 

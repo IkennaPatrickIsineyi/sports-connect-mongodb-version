@@ -51,9 +51,6 @@ function UpdatePassword() {
         }
     }
 
-    console.log(state);
-
-
     return (
         <Box display='flex' justifyContent='center' alignItems='center'>
             <Card>

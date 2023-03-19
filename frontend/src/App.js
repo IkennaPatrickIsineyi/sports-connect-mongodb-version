@@ -15,7 +15,10 @@ import UpdatePassword from './UpdatePassword/UpdatePassword';
 
 
 function App() {
+
   return (
+
+
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<RootLayout />} >
@@ -33,6 +36,8 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+
+
   );
 }
 

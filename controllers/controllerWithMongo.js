@@ -15,6 +15,7 @@ const FormData = require('form-data');
 
 //check if user is logged in: user required to log in first else request fails
 exports.isLoggedIn = (req, res, next) => {
+    console.log('isLoggedIn')
     if (req.session.user) return next(); //User is logged in, hence proceed to next middleware
     else return res.send({ error: 'not-logged-in' });
 };
@@ -110,7 +111,7 @@ const registerUser = (req, res, data) => {
 
         const successCallback = (result) => {
             console.log(result);
-            if (result.insertedCount) {
+            if (result.insertedId) {
                 //send response to user. Send the user to index page.
                 //We could have just logged the user in, but that will increase request processing time.
                 //When the user is routed to the index page, they will be showed the login page 
@@ -265,7 +266,7 @@ const sendOTP = (req, res, email, phone, type) => {
             if (type === 'registration') {
                 const successCallback = (result) => {
                     console.log(result);
-                    if (result.insertedCount) {
+                    if (result.insertedId) {
                         //send email
                         const Emailpayload = {
                             from: process.env.EMAIL,
@@ -432,6 +433,9 @@ exports.changePassword = (req, res) => {
 
 //change password of already logged in user. Requires no OTP
 exports.updatePassword = (req, res) => {
+    const logOut = (req, res) => {
+        this.logout(req, res);
+    }
     //Hash the password
     bcrypt.hash(req.body.password, 10, function (err, passwordHash) {
         if (err) res.send({
@@ -440,7 +444,8 @@ exports.updatePassword = (req, res) => {
         });
         const successCallback = (result) => {
             if (result) {
-                res.send({ result: 'success' });
+                logOut(req, res);
+                //res.send({ result: 'success' });
             }
             else {
                 res.send({ error: 'generic', errMsg: 'Something went wrong. Try again later' });
@@ -486,7 +491,8 @@ exports.getEmail = (req, res) => {
 //change the email of this user
 exports.updateEmail = (req, res) => {
     const successCallback = (result) => {
-        return res.send({ result: 'success' });
+        this.logout(req, res)
+        //return res.send({ result: 'success' });
     };
     const errorCallback = (err) => {
         console.log(err);
@@ -514,7 +520,7 @@ exports.getProfileData = (req, res) => {
             profileData: {
                 phone: result?.phone, email: result?.email,
                 username: result?.username, profile_picture: result?.profile_picture
-            }, interests: result.interests
+            }, interest: result.interest
         }
         res.send({ result: profile });
     };
